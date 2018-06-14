@@ -9,6 +9,7 @@ import Home2 from '@/components/Home2.vue'
 Vue.use(Router)
 
 export default new Router({
+  base: './',
   routes: [
     {
       path: '/',
