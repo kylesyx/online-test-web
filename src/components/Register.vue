@@ -86,7 +86,6 @@ import router from './router'
       methods: {
         submit(formName){
           this.$refs[formName].validate((valid)=> {
-
             if(valid){
               this.$axios.get('http://localhost:8081/uc/select', {
                 params: {

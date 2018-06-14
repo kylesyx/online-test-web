@@ -1,8 +1,11 @@
+import Vue from 'vue';
+import axios from 'axios'
+import router from './router'
+
 <template>
   <div class = "note" :style = "note">
     <div class = "loginFrame">
-      <el-form ref = "AccountForm" :model = "AccountForm"   rules = "rules"  class = "demo-ruleForm login-container">
-
+      <el-form :model = "AccountForm" rules = "rules" ref = "AccountForm"  class = "login-container">
         <div class = "tabsUser">
           <el-tabs v-model = "activeName" @tab-click = "handleClick" class = "users" style = "height: 30px;font-size: 25px;margin-bottom: 30px">
             <el-tab-pane label = "用户" name = "user" class = "tab1"></el-tab-pane>
@@ -12,9 +15,9 @@
 
         <div class = "formGroup">
           <el-form-item  label = "账号" prop = "username" >
-            <el-input type = "text" auto-complete = "off" placeholder = "请输入您的账号" class = "form-control" ></el-input></el-form-item>
+            <el-input type = "text" v-model="AccountForm.username" auto-complete = "off" placeholder = "请输入您的账号" class = "form-control" ></el-input></el-form-item>
           <el-form-item label = "密码"  prop = "password" class = "form-inline">
-            <el-input type = "password" auto-complete = "off" placeholder = "请输入密码" class = "form-control" ></el-input></el-form-item>
+            <el-input type = "password" v-model="AccountForm.password" auto-complete = "off" placeholder = "请输入密码" class = "form-control" ></el-input></el-form-item>
         </div>
         <div class = "remFor">
 
@@ -24,7 +27,7 @@
 
         <div class = "formButton">
           <el-form-item style = "width:100%;">
-            <el-button style = "width:100%; height: 35px; background: #3A825E; font-size:14px; font-family:PingFang SC; color:#fff; border-radius:10px " @click =  "login" >登录</el-button>
+            <el-button style = "width:100%; height: 35px; background: #3A825E; font-size:14px; font-family:PingFang SC; color:#fff; border-radius:10px " @click =  "login('AccountForm')" >登录</el-button>
           </el-form-item>
         </div>
       </el-form>
@@ -64,18 +67,41 @@
       };
     },
     methods: {
-      login() {
-        //0. if user is admin , login url = xxxx
-             //if user is normal,url = uyyyy
-        //1. send request to server
-        //2. login name and password incorrect
-        //3. login success:
-         //3.1 save token
-         //3.2
-        if (this.activeName=="user")
-        this.$router.push('/Home')
-
-        else this.$router.push('/Home2')
+      login(formName) {
+          this.$refs[formName].validate((valid)=> {
+              if(valid){
+                if (this.activeName=="user")
+                  this.$axios.get('http://localhost:8081/uc/select', {
+                    params: {
+                      username: this.AccountForm.username
+                    }
+                  })
+                .then((response) => {
+                    if (response.data.username==null){
+                        alert('未找到用户')
+                    }
+                    else {
+                        if (response.data.username=="admin")
+                            alert('请点击管理员标签登入')
+                        else if (this.AccountForm.password==response.data.password){
+                            alert('登入成功')
+                            this.$router.replace('/Home')
+                        }
+                        else {
+                            alert('密码错误')
+                            this.$router.replace('/')
+                        }
+                    }
+                })
+                else {
+                    if (this.AccountForm.username!="admin")
+                        alert('管理员账号错误')
+                    else if (this.AccountForm.password!="admin")
+                        alert('管理员密码错误')
+                    else this.$router.push('/Home2')
+                }
+              }
+          });
       }
     },
     created(){
