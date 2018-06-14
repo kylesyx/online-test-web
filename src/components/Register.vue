@@ -88,14 +88,14 @@ import router from './router'
           this.$refs[formName].validate((valid)=> {
 
             if(valid){
-              this.$axios.get('http://localhost:8080/uc/select', {
+              this.$axios.get('http://localhost:8081/uc/select', {
                 params: {
                   username: this.RegisterForm.username
                 }
               })
                 .then((response) => {
                 if (response.data.username==null){
-                  this.$axios.post('http://localhost:8080/uc/uadd',
+                  this.$axios.post('http://localhost:8081/uc/uadd',
                     {
                       'username': this.RegisterForm.username,
                       'password': this.RegisterForm.password,
