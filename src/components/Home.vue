@@ -1,6 +1,7 @@
 <template>
     <div>
       <h1>主界面</h1>
+        <button id="logout" @click="logout()">注销</button>
     </div>
 </template>
 
@@ -10,6 +11,12 @@
       data(){
           return{
 
+          }
+      },
+      methods:{
+          logout(){
+            localStorage.token=null;
+            this.$router.push('/')
           }
       }
     }

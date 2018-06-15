@@ -70,29 +70,26 @@ import router from './router'
       login(formName) {
           this.$refs[formName].validate((valid)=> {
               if(valid){
-                if (this.activeName=="user")
-                  this.$axios.get('http://localhost:8081/uc/select', {
-                    params: {
-                      username: this.AccountForm.username
-                    }
-                  })
+                if (this.activeName=="user"){
+                    if (this.AccountForm.username=="admin")
+                        alert('请点击管理员标签登入')
+                    else{
+                    this.$axios.post('http://localhost:8081/uc/verify',
+                        {
+                            'username': this.AccountForm.username,
+                            'password': this.AccountForm.password,
+                        })
                 .then((response) => {
-                    if (response.data.username==null){
-                        alert('未找到用户')
+                    console.log(response.data)
+                    if (response.data=="1"){
+                        alert('用户名或密码错误')
                     }
                     else {
-                        if (response.data.username=="admin")
-                            alert('请点击管理员标签登入')
-                        else if (this.AccountForm.password==response.data.password){
-                            alert('登入成功')
-                            this.$router.replace('/Home')
-                        }
-                        else {
-                            alert('密码错误')
-                            this.$router.replace('/')
-                        }
+                        localStorage.token=response.data;
+                        alert('登入成功')
+                        this.$router.push('/Home')
                     }
-                })
+                })}}
                 else {
                     if (this.AccountForm.username!="admin")
                         alert('管理员账号错误')
