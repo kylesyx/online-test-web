@@ -70,15 +70,15 @@ import router from './router'
           rules: {
             username :[
               {required: true, message: '请输入账号',trigger:'blur'},
-              {min:1,max:8,message:'必须3-8个字符',trigger:'blur'}
+              {min:3,max:8,message:'必须3-8个字符',trigger:'blur'}
             ],
             password: [
               {required:true,validator:validatePass,trigger:'blur'},
-              {min:1,max:8,message:'必须5-8个字符',trigger:'blur'}
+              {min:5,max:8,message:'必须5-8个字符',trigger:'blur'}
             ],
             confirm: [
               {required:true,validator:validatePass2,trigger:'blur'},
-              {min:1,max:8,message:'必须5-8个字符',trigger:'blur'}
+              {min:5,max:8,message:'必须5-8个字符',trigger:'blur'}
             ]
           }
         }
@@ -93,14 +93,14 @@ import router from './router'
                 }
               })
                 .then((response) => {
+                   // alert(response.data)
                 if (response.data.username==null){
                   this.$axios.post('http://localhost:8081/uc/uadd',
                     {
                       'username': this.RegisterForm.username,
                       'password': this.RegisterForm.password,
                     }).then((result) => {
-                    alert(result.data)
-                    alert('submit');
+                    alert('用户名'+result.data.username+' 密码'+result.data.password+'\n注册成功')
                     this.$router.replace('/')
                   })
                 }

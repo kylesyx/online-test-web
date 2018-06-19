@@ -80,7 +80,6 @@ import router from './router'
                             'password': this.AccountForm.password,
                         })
                 .then((response) => {
-                    console.log(response.data)
                     if (response.data=="1"){
                         alert('用户名或密码错误')
                     }
